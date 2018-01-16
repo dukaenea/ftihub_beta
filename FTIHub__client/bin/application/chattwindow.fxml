@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="460.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ChatWindowController">
+   <children>
+      <Pane prefHeight="459.0" prefWidth="303.0" styleClass="leftPanelElement">
+         <children>
+            <Pane prefHeight="54.0" prefWidth="303.0" styleClass="leftPanelElement">
+               <children>
+                  <Label id="lblUser" fx:id="labeluser" alignment="CENTER" layoutX="114.0" layoutY="1.0" prefHeight="54.0" prefWidth="188.0" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Circle id="imgProfilePicture" fill="DODGERBLUE" layoutX="91.0" layoutY="27.0" radius="23.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Button layoutY="3.0" mnemonicParsing="false" onAction="#btnBackToLoginCliked" prefHeight="46.0" prefWidth="52.0">
+                     <styleClass>
+                        <String fx:value="backbtn" />
+                        <String fx:value="leftPanelElement" />
+                     </styleClass>
+                     <graphic>
+                        <ImageView fitHeight="38.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Images/move-to-next_318-80203.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+               </children>
+            </Pane>
+            <TextField id="txtSearch" layoutX="11.0" layoutY="54.0" prefHeight="38.0" prefWidth="281.0" promptText="Search" styleClass="txtfield" />
+            <Line endX="130.0" layoutX="152.0" layoutY="92.0" startX="-130.0" stroke="WHITE" />
+            <Button fx:id="globalArea" layoutX="11.0" layoutY="101.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="281.0" text="Global" textFill="WHITE">
+               <font>
+                  <Font size="19.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="whiteborder" />
+                  <String fx:value="leftPanelElement" />
+               </styleClass>
+            </Button>
+            <ScrollPane hbarPolicy="NEVER" layoutX="-1.0" layoutY="153.0" prefHeight="309.0" prefWidth="303.0" styleClass="leftPanelElement" vbarPolicy="NEVER">
+               <content>
+                  <GridPane fx:id="usersArea" prefHeight="307.0" prefWidth="302.0" styleClass="leftPanelElement">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="96.0" minWidth="10.0" prefWidth="51.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="211.0" minWidth="10.0" prefWidth="211.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="40.0" prefWidth="40.0" />
+                    </columnConstraints>
+                  </GridPane>
+               </content>
+            </ScrollPane>
+         </children>
+      </Pane>
+      <Pane layoutX="303.0" prefHeight="460.0" prefWidth="498.0" styleClass="paneRight">
+         <children>
+            <TextField fx:id="txtMessage" layoutX="13.0" layoutY="416.0" prefHeight="31.0" prefWidth="426.0" promptText="Enter message here" styleClass="paneRight" />
+            <Circle id="imgOtherProfilePicture" fill="DODGERBLUE" layoutX="40.0" layoutY="34.0" radius="27.0" stroke="BLACK" strokeType="INSIDE" />
+            <Label fx:id="lblOtherUser" alignment="CENTER" layoutX="81.0" layoutY="10.0" prefHeight="43.0" prefWidth="405.0" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Button id="btnSend" fx:id="btnSend" layoutX="439.0" layoutY="406.0" mnemonicParsing="false" onAction="#btnMessageClicked" prefHeight="46.0" prefWidth="52.0">
+               <styleClass>
+                  <String fx:value="paneRight" />
+                  <String fx:value="backbtn" />
+               </styleClass>
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" rotate="178.7" styleClass="backbtn">
+                     <image>
+                        <Image url="@../Images/move-to-next_318-80203.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <ScrollPane fx:id="chatScroll" hbarPolicy="NEVER" hmax="0.0" layoutX="14.0" layoutY="66.0" prefHeight="328.0" prefWidth="475.0" style="-fx-background-color: #637799;" styleClass="paneRight" vbarPolicy="NEVER">
+               <content>
+                  <Pane prefHeight="329.0" prefWidth="475.0" styleClass="paneRight" />
+               </content></ScrollPane>
+            <Button fx:id="pinButton" layoutX="421.0" layoutY="19.0" mnemonicParsing="false" onAction="#pinButtonClicked" prefHeight="31.0" prefWidth="33.0" styleClass="paneRight">
+               <graphic>
+                  <ImageView fx:id="pin" fitHeight="35.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../bin/Images/push-pin-white.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children></Pane>
+   </children>
+</AnchorPane>

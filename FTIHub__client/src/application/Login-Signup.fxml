@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+   <children>
+      <Pane id="paneRightsu" layoutX="344.0" prefHeight="400.0" prefWidth="256.0" styleClass="paneRight">
+         <children>
+            <TextField fx:id="email" layoutX="28.0" layoutY="188.0" prefHeight="25.0" prefWidth="201.0" promptText="email" styleClass="txtfield" />
+            <Label alignment="CENTER" layoutX="85.0" layoutY="48.0" prefHeight="26.0" prefWidth="87.0" text="SignUp" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="username" layoutX="28.0" layoutY="149.0" prefHeight="25.0" prefWidth="201.0" promptText="username" styleClass="txtfield" />
+            <Line endX="100.0" layoutX="129.0" layoutY="174.0" startX="-100.0" stroke="WHITE" />
+            <Line endX="100.0" layoutX="128.0" layoutY="213.0" startX="-100.0" stroke="WHITE" />
+            <Line endX="100.0" layoutX="128.0" layoutY="260.0" startX="-100.0" stroke="WHITE" />
+            <Line endX="100.0" layoutX="129.0" layoutY="309.0" startX="-100.0" stroke="WHITE" />
+            <PasswordField fx:id="password" layoutX="28.0" layoutY="228.0" prefHeight="25.0" prefWidth="201.0" promptText="password" styleClass="txtfield" />
+            <PasswordField fx:id="confirmpassword" layoutX="28.0" layoutY="277.0" prefHeight="25.0" prefWidth="201.0" promptText="confirm password" styleClass="txtfield" />
+            <Button id="subtbtn" layoutX="28.0" layoutY="335.0" mnemonicParsing="false" onAction="#signUpSubmitClicked" prefHeight="25.0" prefWidth="74.0" text="Submit" textFill="WHITE">
+               <styleClass>
+                  <String fx:value="txtfield" />
+                  <String fx:value="whiteborder" />
+               </styleClass>
+            </Button>
+            <Button id="backtologin" layoutX="14.0" layoutY="91.0" mnemonicParsing="false" onAction="#backToLogInClicked" prefHeight="25.0" prefWidth="32.0" textFill="WHITE">
+               <styleClass>
+                  <String fx:value="txtfield" />
+                  <String fx:value="backbtn" />
+               </styleClass>
+               <graphic>
+                  <ImageView fitHeight="31.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/move-to-next_318-80203.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Pane fx:id="paneRightli" layoutX="1.0" prefHeight="400.0" prefWidth="256.0" styleClass="paneRight">
+               <children>
+                  <PasswordField fx:id="loginpassword" layoutX="28.0" layoutY="241.0" prefHeight="25.0" prefWidth="201.0" promptText="password" styleClass="txtfield" />
+                  <Label alignment="CENTER" layoutX="85.0" layoutY="49.0" prefHeight="26.0" prefWidth="87.0" text="LogIn" textFill="WHITE">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="loginusername" layoutX="28.0" layoutY="175.0" prefHeight="25.0" prefWidth="213.0" promptText="username" styleClass="txtfield" />
+                  <Line endX="100.0" layoutX="128.0" layoutY="200.0" startX="-100.0" stroke="WHITE" />
+                  <Line endX="100.0" layoutX="128.0" layoutY="273.0" startX="-100.0" stroke="WHITE" />
+                  <Button id="loginbtn" layoutX="28.0" layoutY="315.0" mnemonicParsing="false" onAction="#logInClicked" prefHeight="25.0" prefWidth="74.0" text="Log In" textFill="WHITE">
+                     <styleClass>
+                        <String fx:value="txtfield" />
+                        <String fx:value="whiteborder" />
+                     </styleClass>
+                  </Button>
+                  <Button id="signupbtn" layoutX="155.0" layoutY="316.0" mnemonicParsing="false" onAction="#signUpClicked" prefHeight="25.0" prefWidth="74.0" text="Sign Up" textFill="WHITE">
+                     <styleClass>
+                        <String fx:value="txtfield" />
+                        <String fx:value="whiteborder" />
+                     </styleClass>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Pane id="paneLeft" prefHeight="400.0" prefWidth="345.0">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="98.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/chatbubbles.png" />
+               </image>
+            </ImageView>
+            <Line endX="100.0" layoutX="173.0" layoutY="272.0" startX="-100.0" stroke="WHITE" />
+            <Line endX="70.0" layoutX="187.0" layoutY="294.0" startX="-100.0" stroke="WHITE" />
+            <Line endX="50.0" layoutX="173.0" layoutY="316.0" startX="-50.0" stroke="WHITE" />
+            <Label id="lblTittle" alignment="CENTER" layoutX="75.0" layoutY="28.0" prefHeight="66.0" prefWidth="185.0" text="FTIHub" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
