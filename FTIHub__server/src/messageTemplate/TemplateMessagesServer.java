@@ -11,6 +11,9 @@ public class TemplateMessagesServer extends TemplateMessages {
 		return stringify(type("login-success") + ",\"id\": \"" + id + "\"}");
 	}
 
+	public String signupStat(int stat) {
+		return stringify(type("signup-stat") + ",\"stat\": \"" + stat + "\"}");
+	}
 	public String loginInitial(int id,HashMap<Integer,ServerClient> allClients) {
 		return "";
 	}

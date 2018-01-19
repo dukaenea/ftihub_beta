@@ -90,11 +90,6 @@ public class Server implements Runnable {
 		while (running) {
 			System.out.println(allClients.size());
 			String text = scanner.nextLine();
-			if (!text.startsWith("/")) {
-				String serverMessage = Template.serverMessage(text);
-				sendToAll(serverMessage);
-				continue;
-			}
 			text = text.substring(1);
 			if (text.equals("raw")) {
 				if (raw)
@@ -169,7 +164,7 @@ public class Server implements Runnable {
 			public void run() {
 				while (running) {
 					String ping = Template.ping();
-					sendToAll(ping);
+					sendToAll(ping,false);
 					// sendStatus();
 					try {
 						Thread.sleep(2000);
@@ -197,19 +192,19 @@ public class Server implements Runnable {
 		manage.start();
 	}
 
-	private void sendStatus() {
-		// if (clients.size() <= 0) return;
-		StringBuilder users = new StringBuilder();
-		users.append("/u/");
-		for (ServerClient c : allClients.values()) {
-			if (c.online)
-				users.append(c.name + "/n/");
-		}
-
-		users.append("/e/");
-
-		sendToAll(users.toString());
-	}
+//	private void sendStatus() {
+//		// if (clients.size() <= 0) return;
+//		StringBuilder users = new StringBuilder();
+//		users.append("/u/");
+//		for (ServerClient c : allClients.values()) {
+//			if (c.online)
+//				users.append(c.name + "/n/");
+//		}
+//
+//		users.append("/e/");
+//
+//		sendToAll(users.toString());
+//	}
 
 	private void receive() {
 		receive = new Thread("Receive") {
@@ -238,9 +233,14 @@ public class Server implements Runnable {
 		}
 	}
 
-	private void sendToAll(String message) {
+	private void sendToAll(String message,boolean global) {
+		JSONObject jo = JSON.parse(message);
+		String name="";
+		if(global) {
+			name = jo.getString("name");	
+		}
 		for (ServerClient c : allClients.values()) {
-			if (c.online) {
+			if (c.online && (!c.getName().equals(name))) {
 
 				send(message.getBytes(), c.address, c.port);
 			}
@@ -275,7 +275,7 @@ public class Server implements Runnable {
 			//System.out.println(suc);
 			allClients = new HashMap<Integer, ServerClient>();
 			getAllClients();
-			send(Integer.toString(suc).getBytes(),packet.getAddress(),packet.getPort());
+			send(Template.signupStat(suc).getBytes(),packet.getAddress(),packet.getPort());
 			//po bej nje while ne client qe te kap nese ishte insert i suksesshem e pastaj te veproj ne menyre analoge
 		case "login":
 			JSONObject loginCredetials=JSON.parse(string);
@@ -300,7 +300,7 @@ public class Server implements Runnable {
 			}
 			break;
 		case "global-message":
-			sendToAll(string);
+			sendToAll(string,true);
 			break;
 		case "disconnect":
 			JSONObject disconnect=JSON.parse(string);

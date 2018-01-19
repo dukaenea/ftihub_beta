@@ -88,17 +88,19 @@ public class DBQuery {
 				Connection con=DBConnection.getConnection();
 				
 				PreparedStatement ps=con.prepareStatement(
-						"select message,online from t_privatechat where id_sender=?  and id_receiver=?"
+						"select message,online,id_sender from t_privatechat where (id_sender=?  and id_receiver=?) or (id_sender=?  and id_receiver=?)"
 						,ResultSet.TYPE_SCROLL_INSENSITIVE
 						,ResultSet.CONCUR_READ_ONLY);
 
 				) 
 				{
-					ps.setInt(1, idSender);
-					ps.setInt(2, idTab);
+					ps.setInt(1, idTab);
+					ps.setInt(2, idSender);
+					ps.setInt(3, idSender);
+					ps.setInt(4, idTab);
 					
-					s.append("{\"type\": \"new-tab\",\"messages\":[");
-							
+					s.append("{\"type\": \"new-tab\",\"idsender\": \""+idTab+"\",\"messages\":[");
+					
 					 try (ResultSet rs = ps.executeQuery()) {
 						 
 						 int nrMessages=0;
@@ -107,11 +109,14 @@ public class DBQuery {
 						  
 						    String message = rs.getString("message");
 						    boolean online= rs.getBoolean("online");
+						    int id_sender = rs.getInt("id_sender");
 						    if(!online) nrNotification++;
-						    s.append("{\"online\":\""+Boolean.toString(online)+"\",\"message\":\""+message+"\"},");
+						    s.append("{\"online\":\""+Boolean.toString(online)+"\",\"message\":\""+message+"\",\"id_sender\":\""+id_sender+"\"},");
 						    nrMessages++; 
 						 }
-						 s.setLength(s.length() - 1);
+						 if(s.charAt(s.length()-1)==',') {
+							 s.setLength(s.length() - 1); 	 
+						 }
 						 s.append("],\"nrNotification\":\""+nrNotification+"\",\"nrMessages\":\""+nrMessages+"\"}");						 
 					    }// try
 					} // try
