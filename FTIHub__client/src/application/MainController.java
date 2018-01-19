@@ -56,14 +56,14 @@ public class MainController {
 				
 				}else {
 		        potentialClient.send(Template.signupCredentials(name,psw,eml).getBytes());
-				
+		        listenForLoginOrSignup(potentialClient);
 			}
 		  }
 		}
-		
-		
-		
 	} 
+	
+	
+	
 	
 	public void logInClicked(ActionEvent e) {
 		
@@ -77,52 +77,32 @@ public class MainController {
 			
 			}else {
 	        client.send(Template.loginCredentials(client.getName(),client.getPassword()).getBytes());
-	        
-			while(true) {
-				String string = client.receive();
-				   if(JSON.getTypeOfMessage(string).equals("login-success")) {
-					JSONObject parsedMessage = JSON.parse(string);
-					client.setId(parsedMessage.getInt("id"));
-				   }
-					//SceneManager sm = new SceneManager(new Stage(),"/application/chattwindow.fxml","application.css",800,460);
-					 //sm.initScene();
-					 //sm.showScene();
-					 //Main.getMainScene().hideScene();
-					
-					//console("Attempting a connection to " + client.getAddress() + ":" + client.getPort() + ", user: " + client.getName());
-				   else if(JSON.getTypeOfMessage(string).equals("login-fail")) {
-					// Print wrong credentials or send to sign up Tab
-					System.out.println("Wrong username or password!");
-					break;	
-					}
-				   else if(JSON.getTypeOfMessage(string).equals("all-users")) {
-					JSONObject message=JSON.parse(string);
-					createWindow(message);
-					//console(string);
-					break;
-					}
-			}
+	        listenForLoginOrSignup(client);
+			
 				new ClientInstance(client);
-		}
-	    	//if(c.receive().contains("login-success")) {
-	    		//users = c.receive();
-//		        sm = new SceneManager(new Stage(),"/application/chattwindow.fxml","application.css",800,460);
-//				sm.initScene();
-//				sm.showScene();
-//			Main.getMainScene().hideScene();
 			}
+	    	
+		}
 	}
+	
+	
+	
+	
 	     
-		
-	//}
 	
 	public void signUpClicked(ActionEvent e) {
 		paneRightli.setVisible(false);
 	}
 	
+	
+	
+	
 	public void backToLogInClicked(ActionEvent e) {
 		paneRightli.setVisible(true);
 	}
+	
+	
+	
 	
 	private boolean validateFields(String email, String psw) {
 		
@@ -135,23 +115,31 @@ public class MainController {
 		else 
 			return false;
 	}
+	
+	
+	
+	
 
 	public static SceneManager getLoginScene() {
 		return sm;
 	}
 	
-//	private void login(String username, String password) throws Exception {
-//
-//		new ClientInstance(new Client(username,password, hostAddress, hostListenport));
-//	} 
+	
+	
+	
 	
 	public static Client getClient() {
 		return client;
 	}
 	
+	
+	
 	public static String getUsers() {
 		return users;
 	}
+	
+	
+	
 	
 	public static void createWindow(JSONObject message) {
 		ChatWindowController.setUsersContainer(message);
@@ -160,5 +148,39 @@ public class MainController {
 		sm.showScene();
 		Main.getMainScene().hideScene();
 		
+	}
+	
+	
+	
+	
+	private void listenForLoginOrSignup(Client client) {
+		while(true) {
+			String string = client.receive();
+			   if(JSON.getTypeOfMessage(string).equals("signup-stat")) {
+				   JSONObject parsedMessage = JSON.parse(string);
+				   if(parsedMessage.getInt("stat")==1)
+					   paneRightli.setVisible(true);
+				   else {
+					   System.out.println("An account with that username already exists");
+					   username.setText("");
+				   }
+				   break;
+			   }
+			
+			   if(JSON.getTypeOfMessage(string).equals("login-success")) {
+				JSONObject parsedMessage = JSON.parse(string);
+				client.setId(parsedMessage.getInt("id"));
+			   }
+			   
+			   else if(JSON.getTypeOfMessage(string).equals("login-fail")) {
+				System.out.println("Wrong username or password!");
+				break;	
+				}
+			   else if(JSON.getTypeOfMessage(string).equals("all-users")) {
+				JSONObject message=JSON.parse(string);
+				createWindow(message);
+				break;
+				}
+		}
 	}
 }

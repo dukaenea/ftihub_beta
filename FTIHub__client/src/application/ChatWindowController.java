@@ -12,7 +12,8 @@ import Tools.ChatLog;
 import Tools.Mode;
 import Tools.Role;
 import Tools.UserEntry;
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
+import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -59,25 +60,21 @@ public class ChatWindowController implements Initializable{
 		 JSONArray usr = user.getJSONArray("users");
 		 users=usr;
 	}
+	
+	
+	
 	public static HashMap<String,ChatLog> getChatLogsContainers(){
 		return chatlogs;
 	}
-//	public static ScrollPane getScrollPane() {
-//		return chatScroll;
-//	}
+	
+	
+	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
-		for(int i=0;i<users.length();i++) {
-			//Image img = new Image("Images\\push-pin1.png");
-			JSONObject user = (JSONObject) users.get(i);
-			if(user.getInt("id")==MainController.getClient().getId())
-				continue;
-			UserEntry ue = new UserEntry(user.getString("username"),Boolean.parseBoolean(user.getString("online")),usersArea,i,Integer.parseInt(user.getString("id")));
-			ue.getUsrLabel().addEventHandler(MouseEvent.MOUSE_CLICKED , 
-		             event -> {labelContactClicked(event,ue);});
-		}
+	    fillUserArea(users);
+		
 		
 		globalArea.addEventHandler(ActionEvent.ACTION, 
 				 				   event -> { switchToGlobal(event);});
@@ -85,7 +82,48 @@ public class ChatWindowController implements Initializable{
 		txtMessage.addEventHandler(ActionEvent.ACTION,
 								   event -> {btnMessageClicked(event);});
 		labeluser.setText(MainController.getClient().getName());
+		
+		txtSearch.addEventHandler(ActionEvent.ACTION, 
+									event -> {handleSearch();});
 	}	
+	
+	
+	public void handleSearch() {
+		String looking = txtSearch.getText();
+		if(looking.equals("")) {
+			fillUserArea(users);	
+		}
+		else {
+			JSONArray searchResult = new JSONArray();
+			for(int i=0;i<users.length();i++) {
+				JSONObject usr = users.getJSONObject(i);
+				String s = usr.getString("username");
+				if(usr.getString("username").toLowerCase().contains(looking.toLowerCase()))
+					searchResult.put(usr);
+			}
+			usersArea.getChildren().clear();
+			fillUserArea(searchResult);
+		}
+	}
+	
+	
+	
+	public void fillUserArea(JSONArray usersToFillWith) {
+		
+		int j=0;
+		for(int i=0;i<usersToFillWith.length();i++) {
+			//Image img = new Image("Images\\push-pin1.png");
+			JSONObject user = (JSONObject) usersToFillWith.get(i);
+			if(user.getInt("id")==MainController.getClient().getId())
+				continue;
+			UserEntry ue = new UserEntry(user.getString("username"),Boolean.parseBoolean(user.getString("online")),usersArea,j,Integer.parseInt(user.getString("id")));
+			j++;
+			ue.getUsrLabel().addEventHandler(MouseEvent.MOUSE_CLICKED , 
+		             event -> {labelContactClicked(event,ue);});
+		}
+	}
+	
+	
 	
 	public void switchToGlobal(ActionEvent e) {
 		
@@ -104,6 +142,9 @@ public class ChatWindowController implements Initializable{
 		pinButton.setVisible(true);
 	}
 	
+	
+	
+	
 	public void pinButtonClicked(ActionEvent e) {
 		if(clicked == false) {
 			 pin.setImage(new Image("Images\\push-pin1.png"));
@@ -115,15 +156,27 @@ public class ChatWindowController implements Initializable{
 		}
 	}
 	
+	
+	
+	
+	
 	public  void labelContactClicked(MouseEvent event,UserEntry ue) {
 		
 		Label usr = (Label) event.getSource();
 		
 		if(!chatlogs.containsKey(Integer.toString(ue.getId()))) {
 			ChatLog cl = new ChatLog(ue.getId(),chatScroll,Mode.PTP);
-			cl.bindGridToScroll(chatScroll);
+			MainController.getClient().send(Template.changeChatTab(ue.getId(), MainController.getClient().getId()).getBytes());
+			Platform.runLater(new Runnable() {
+	            @Override
+	            public void run() {
+	            	cl.bindGridToScroll(chatScroll);
+	            }
+	       });
+			
 			chatlogs.put(Integer.toString(ue.getId()), cl);
 			currentchat = cl;
+			
 		}
 		else {
 			ChatLog cl = chatlogs.get(Integer.toString(ue.getId()));
@@ -138,6 +191,10 @@ public class ChatWindowController implements Initializable{
 	}
 	
 	
+	
+	
+	
+	
 	public void btnMessageClicked(ActionEvent e) {
 		
 		if(txtMessage.getText() != "") {
@@ -148,6 +205,8 @@ public class ChatWindowController implements Initializable{
 		
 		txtMessage.setText("");
 	}
+	
+	
 	
 	public void routeMessage(String text) {
 		int currentTabIdUser = currentchat.getPeerId();
@@ -162,6 +221,10 @@ public class ChatWindowController implements Initializable{
 		}
 	}
 	
+	
+	
+	
+	
 	private void send(String message,boolean text) {
 		if(text) {
 			if(JSON.parse(message).has("message")){
@@ -175,10 +238,14 @@ public class ChatWindowController implements Initializable{
 	}
 	
 	
+	
+	
 	public void btnBackToLoginCliked(ActionEvent e) {
 		MainController.getLoginScene().hideScene();
 		Main.getMainScene().showScene();
 	}
+	
+	
 
 	public static int getCurrentChatLog() {
 		return currentchat.getPeerId();

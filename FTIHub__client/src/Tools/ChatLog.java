@@ -1,11 +1,18 @@
 package Tools;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 public class ChatLog {
 	
@@ -42,13 +49,19 @@ public class ChatLog {
     	sp.setContent(this.gp);
     }
     
-    public void restoreChatLog(ScrollPane sp) {
-    	System.out.println(gp.getChildren().size());
-    	gp.getChildren().clear();
-    	System.out.println(gp.getChildren().size());
-    	for(rownr = 0;rownr<cll.size();rownr++) {
-    		cll.get(rownr).createBubble(gp, rownr);
+    public void restoreChatLog(JSONArray messages) {
+    	
+    	for(int i=0;i<messages.length();i++) {
+    		JSONObject entry = (JSONObject) messages.get(i);
+    		if(entry.getInt("id_sender")==peerId) {
+    			addChatBubble(entry.getString("message"), Role.PEER,"");
+    		}
+    		else {
+    			addChatBubble(entry.getString("message"), Role.USER,"");
+    		}
+    		
     	}
+    	
     }
     
     public void addChatBubble(String msg, Role role,String peerId) {
