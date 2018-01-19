@@ -22,4 +22,8 @@ public class ServerClient {
 	public int getID() {
 		return ID;
 	}
+	
+	public String getName() {
+		return name;
+	}
 }
