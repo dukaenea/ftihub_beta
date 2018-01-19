@@ -1,11 +1,11 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
 #paneLeft{
-	-fx-background-color :#313149;
+	-fx-background-color :#31353D;
 }
 
 .paneRight{
-	-fx-background-color: #637799;
+	-fx-background-color: #f2f5f8;
 }
 
 Label{
@@ -13,12 +13,12 @@ Label{
 }
 
 .txtfield{
-	-fx-background-color: #637799;
-	-fx-text-inner-color:"white";
+	-fx-background-color: #f2f5f8;
+	-fx-text-inner-color:"black";
 }
 
 .whiteborder{
-	-fx-border-color:"white";
+	-fx-border-color:#f45f5f;
 }
 
 .backbtn{
@@ -30,22 +30,22 @@ Label{
 }
 
 .leftPanelElement{
-	-fx-background-color :#313149;
+	-fx-background-color:#31353D;
 }
 
 #txtMessage{
-	-fx-background-color: #5e7191;
+	-fx-background-color: #31353D;
 	-fx-text-inner-color:"white";
 }
 
 #txtSearch{
-	-fx-background-color :#313149;
+	-fx-background-color :#31353D;
 	-fx-text-inner-color:"white";
 }
 
 .chat-bubble-left{
     -fx-shape: "m 10 50 l 4 -6 v -10 c 0 0 -1 -6 8 -6 h 81 c 0 0 4.5 0 4 7 v 11 c 0 0 0 4 -6 4 z ";
-    -fx-background-color: #5e7191;
+    -fx-background-color: #f45f5f;
     -fx-padding: 15;
     -fx-alignment : baseline-left;
     -fx-text-fill:"white";
@@ -53,15 +53,19 @@ Label{
 
 .chat-bubble-right{
     -fx-shape: "m 100 50 l -6 -7 v -13 c 0 0 2 -7 -6 -6 h -71 c 0 0 -8 -1 -7 5 v 16 c 0 0 0 6 6 5 z ";
-    -fx-background-color: #5e7191;
+    -fx-background-color: "white";
     -fx-padding: 15;
     -fx-alignment : baseline-right;
--fx-text-fill:"white";}
+-fx-text-fill:"black";}
 
 .users-label{
-	-fx-background-color: #313149;
+	-fx-background-color: #31353D;
 	-fx-padding : 10;
 	-fx-alignment: center;
 	-fx-text-fill:"white";
 	-fx-font-size:18;
+}
+
+.grayborder{
+	fx-border-color:#f2f5f8;
 }

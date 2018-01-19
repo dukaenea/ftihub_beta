@@ -49,14 +49,14 @@ public class ChatBubble {
     
     private RowConstraints constructForUser(double width) {
     	labelWidth = width;
-    	rc.setMinHeight(Math.pow(calcHeight(msg.getText()), 1.1));
+    	rc.setMinHeight(Math.pow(calcHeight(msg.getText()), 1.2));
     	return rc;
     }
     
     private RowConstraints constructForPeer(double width) {
     	
     	labelWidth = width;
-    		rc.setMinHeight(Math.pow(calcHeight(msg.getText()), 1.1));
+    		rc.setMinHeight(Math.pow(calcHeight(msg.getText()), 1.2));
     	return rc;
     	
     }

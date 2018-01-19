@@ -72,7 +72,7 @@ public class Client {
 	}
 
 	public String receive() {
-		byte[] data = new byte[1024];
+		byte[] data = new byte[10024];
 		DatagramPacket packet = new DatagramPacket(data, data.length);
 		try {
 			socket.receive(packet);

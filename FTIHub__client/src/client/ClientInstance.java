@@ -85,7 +85,19 @@ public class ClientInstance implements Runnable{
 				     case "ping":
 						String text=Template.responsePingClient(client.getId());
 						send(text,false);
-						break;  				    	 
+						break;  
+				     case "new-tab":
+				    	 JSONObject chathistory = JSON.parse(string);
+				    	 System.out.println(string);
+				    	 String idofSender = chathistory.getString("idsender");
+				    	 System.out.println( ChatWindowController.getChatLogsContainers().get(idofSender).getPeerId());
+				    	 Platform.runLater(new Runnable() {
+					            @Override
+					            public void run() {
+					            	 ChatWindowController.getChatLogsContainers().get(idofSender).restoreChatLog(chathistory.getJSONArray("messages"));
+					            }
+					       });
+				    	 
 				}
 			  }
 			}
