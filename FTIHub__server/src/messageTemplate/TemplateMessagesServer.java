@@ -23,7 +23,7 @@ public class TemplateMessagesServer extends TemplateMessages {
 		s.append(type("all-users")+",\"users\":[");
 		int n=0;
 		for (ServerClient c : allClients.values()) {
-			s.append("{\"online\":\""+Boolean.toString(c.online)+"\",\"username\":\""+c.name+"\",\"id\":\""+c.getID()+"\"}");
+			s.append("{\"online\":\""+Boolean.toString(c.online)+"\",\"username\":\""+c.name+"\",\"id\":\""+c.getID()+"\",\"noti\":\"false\"}");
 			if(n!=allClients.size()-1){
 				s.append(",");			
 			}

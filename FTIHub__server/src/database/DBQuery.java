@@ -31,6 +31,25 @@ public class DBQuery {
 		   return rowsaffected;
 		}
 	
+	public void insertGlobalMessageToDb(String username,String message) {
+		try(
+		Connection con = DBConnection.getConnection();
+		PreparedStatement ps = con.prepareStatement(
+				"insert into t_pinnedMessages(username,message)values(?,?)",
+				 ResultSet.TYPE_SCROLL_INSENSITIVE
+				 ,ResultSet.CONCUR_READ_ONLY);
+				)
+				{
+					ps.setString(1,username);
+					ps.setString(2,message);
+					ps.executeUpdate();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+	}
+	
 	public void insertChatHistoryOnline(int sender,int receiver, String message) {
 		try(
 				Connection con=DBConnection.getConnection();
@@ -84,6 +103,37 @@ public class DBQuery {
 	
 		StringBuilder s=new StringBuilder();
 		
+		if(idTab==-1) {
+			try (
+				Connection con=DBConnection.getConnection();
+				
+				PreparedStatement ps = con.prepareStatement(
+						  "select * from t_pinnedMessages"
+						,ResultSet.TYPE_SCROLL_INSENSITIVE
+						,ResultSet.CONCUR_READ_ONLY);
+						)
+						{
+				            s.append("{\"type\": \"new-tab\",\"idsender\": \""+idTab+"\",\"messages\":[");
+							ResultSet rs = ps.executeQuery();
+							
+							while(rs.next()) {
+								String name = rs.getString("username");
+								String message = rs.getString("message");
+								s.append("{\"name\":\""+name+"\",\"message\":\""+message+"\"},");
+							}
+							 if(s.charAt(s.length()-1)==',') {
+								 s.setLength(s.length() - 1); 	 
+							 }
+							 s.append("]}");
+						}
+			 catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		else {
+		
 		try(
 				Connection con=DBConnection.getConnection();
 				
@@ -124,6 +174,7 @@ public class DBQuery {
 						
 							e.printStackTrace();
 						}
+		}
 				
 			return s.toString();
 	}
