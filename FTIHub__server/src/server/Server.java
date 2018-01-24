@@ -29,7 +29,7 @@ public class Server implements Runnable {
 	private DatagramSocket socket;
 	private int port;
 	private boolean running = false;
-	private Thread run, manage, send, receive;
+	private Thread run, manage, send, receive,databaseManage;
 	private final int MAX_ATTEMPTS = 20;
 
 	private boolean raw = false;
@@ -37,6 +37,8 @@ public class Server implements Runnable {
 	private ParseMessages JSON;
 	private TemplateMessagesServer Template;
 
+	private boolean prova =true;
+	
 	public Server(int port) {
 		this.port = port;
 		this.JSON = new ParseMessages();
@@ -300,6 +302,11 @@ public class Server implements Runnable {
 			}
 			break;
 		case "global-message":
+			JSONObject jo = JSON.parse(string);
+			if(jo.getBoolean("forPin")) {
+				DBQuery db = new DBQuery();
+				db.insertGlobalMessageToDb(jo.getString("name"), jo.getString("message"));
+			}
 			sendToAll(string,true);
 			break;
 		case "disconnect":
@@ -336,13 +343,28 @@ public class Server implements Runnable {
 	}
 
 	private void prepareNewTab(int idTab,int idSender) {
-		//TODO: Make new Thread
-		DBQuery db=new DBQuery();
-		String chatHistory=db.changeChatTab(idTab, idSender);
-		System.out.println(chatHistory);
-		ServerClient c=allClients.get(idSender);
-		send(Template.stringify(chatHistory).getBytes(), c.address, c.port);
-		db.updateChatHistory(idTab, idSender);
+
+		databaseManage=new Thread("databaseManage") {
+			public void run() {
+//				if(prova==true) {
+//					prova=false;
+//					try {
+//						Thread.sleep(10000);
+//					} catch (InterruptedException e) {
+//					
+//						e.printStackTrace();
+//					}
+//
+//				}
+				DBQuery db=new DBQuery();
+				String chatHistory=db.changeChatTab(idTab, idSender);
+				System.out.println(chatHistory);
+				ServerClient c=allClients.get(idSender);
+				send(Template.stringify(chatHistory).getBytes(), c.address, c.port);
+				db.updateChatHistory(idTab, idSender);
+			}
+		};
+		databaseManage.start();
 		
 	}
 	
