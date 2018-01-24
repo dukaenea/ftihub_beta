@@ -78,7 +78,6 @@ public class MainController {
 			}else {
 	        client.send(Template.loginCredentials(client.getName(),client.getPassword()).getBytes());
 	        listenForLoginOrSignup(client);
-			
 				new ClientInstance(client);
 			}
 	    	

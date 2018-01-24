@@ -53,7 +53,9 @@ public class ChatLog {
     	
     	for(int i=0;i<messages.length();i++) {
     		JSONObject entry = (JSONObject) messages.get(i);
-    		if(entry.getInt("id_sender")==peerId) {
+    		if(entry.has("name"))
+    			addChatBubble(entry.getString("message"),Role.PEER,entry.getString("name"));
+    		else if(entry.getInt("id_sender")==peerId) {
     			addChatBubble(entry.getString("message"), Role.PEER,"");
     		}
     		else {

@@ -1,6 +1,6 @@
 package Tools;
 
-import java.awt.Color;
+//import java.awt.Color;
 
 import application.ChatWindowController;
 import javafx.scene.control.Label;
@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -56,7 +56,7 @@ public class UserEntry {
     	un.getStyleClass().add("users-label");
     	
     	Circle noti = new Circle(5);
-    	
+    	noti.setFill(Color.RED);
     	gp.add(pp, 0, rownr);
     	gp.add(un, 1, rownr);
     	if(msgNotification) {

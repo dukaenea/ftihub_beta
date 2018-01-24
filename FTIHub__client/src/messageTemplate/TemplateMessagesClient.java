@@ -10,8 +10,8 @@ public class TemplateMessagesClient extends TemplateMessages {
 		return stringify(type("login") + ",\"username\": \"" + username + "\", \"password\": \"" + password + "\"}");
 	}
 
-	public String message(String message,String name) {
-		return stringify(type("global-message") + ",\"message\": \"" + message + "\",\"name\": \""+name+"\"}");
+	public String message(String message,String name,boolean toPin) {
+		return stringify(type("global-message") + ",\"message\": \"" + message + "\",\"name\": \""+name+"\",\"forPin\":\""+toPin+"\"}");
 	}
 
 	public String privateMessage(int idOfReceiver, int idOfSender, String privateMessage) {
