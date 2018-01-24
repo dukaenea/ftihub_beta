@@ -1,5 +1,6 @@
 package client;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import Tools.Role;
@@ -29,18 +30,6 @@ public class ClientInstance implements Runnable{
 		run.start();
 	}
 	
-	public void routeMessage(String text) {
-		
-		currentTabIdUser = ChatWindowController.getCurrentChatLog();
-		
-		if(currentTabIdUser!=-1) { 	//For private chat
-			String privateMessage=Template.privateMessage(currentTabIdUser, client.getId(), text);
-			send(privateMessage,true);
-		}else {
-			String globalMesssage=Template.message(text,client.getName());
-			send(globalMesssage,true);
-		}
-	}
 
 	private void send(String message,boolean text) {
 		if(text) {
@@ -78,7 +67,21 @@ public class ClientInstance implements Runnable{
 						 Platform.runLater(new Runnable() {
 					            @Override
 					            public void run() {
+					            	if(ChatWindowController.getCurrentChatLog()==Integer.parseInt(idOfSender))
 					            	 ChatWindowController.getChatLogsContainers().get(idOfSender).addChatBubble(pm, Role.PEER,"");
+					            	else {
+					            		System.out.println("here");
+					            		JSONArray ja = ChatWindowController.getUsers();
+					            		for(int i=0;i<ja.length();i++) {
+					            			JSONObject jo = ja.getJSONObject(i);
+					            			if(jo.getString("id").equals(idOfSender)) {
+					            				jo.put("noti", "true");
+					            				ja.put(i, jo);
+					            				break;
+					            			}
+					            		}
+					            		ChatWindowController.countdownuaLatch();
+					            	}
 					            }
 					       });
 						 break;
@@ -95,6 +98,7 @@ public class ClientInstance implements Runnable{
 					            @Override
 					            public void run() {
 					            	 ChatWindowController.getChatLogsContainers().get(idofSender).restoreChatLog(chathistory.getJSONArray("messages"));
+					            	 ChatWindowController.countdownclLatch();
 					            }
 					       });
 				    	 

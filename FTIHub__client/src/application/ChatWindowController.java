@@ -4,6 +4,7 @@ package application;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.concurrent.CountDownLatch;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import Tools.Mode;
 import Tools.Role;
 import Tools.UserEntry;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -54,12 +56,29 @@ public class ChatWindowController implements Initializable{
 	private static JSONArray users = new JSONArray();
 	private ParseMessages JSON=new ParseMessages();
 	private TemplateMessagesClient Template = new TemplateMessagesClient();
+	private static CountDownLatch clLatch = new CountDownLatch(1);
+	private static CountDownLatch uaLatch = new CountDownLatch(1);
 	
 	
+	public static void countdownclLatch() {
+		clLatch.countDown();
+	}
+	
+	
+	
+	public static void countdownuaLatch() {
+		uaLatch.countDown();
+	}
+	
+	
+	public static JSONArray getUsers() {
+		return users;
+	}
 	public static void setUsersContainer(JSONObject user){
 		 JSONArray usr = user.getJSONArray("users");
 		 users=usr;
 	}
+	
 	
 	
 	
@@ -73,9 +92,29 @@ public class ChatWindowController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
-	    fillUserArea(users);
 		
-		
+		fillUserArea(users);
+	    Task getNoti = new Task<Void>() {
+
+			@Override
+			protected Void call() throws Exception {
+				while(true) {
+					uaLatch.await();
+					//System.out.println("unlocked");
+					Platform.runLater(new Runnable() {
+
+						@Override
+						public void run() {
+							fillUserArea(users);
+							uaLatch=new CountDownLatch(1);
+						}
+						
+					});
+				}
+			}
+	    	
+	    };
+	    new Thread(getNoti).start();
 		globalArea.addEventHandler(ActionEvent.ACTION, 
 				 				   event -> { switchToGlobal(event);});
 		
@@ -116,7 +155,8 @@ public class ChatWindowController implements Initializable{
 			JSONObject user = (JSONObject) usersToFillWith.get(i);
 			if(user.getInt("id")==MainController.getClient().getId())
 				continue;
-			UserEntry ue = new UserEntry(user.getString("username"),Boolean.parseBoolean(user.getString("online")),usersArea,j,Integer.parseInt(user.getString("id")));
+			System.out.println(user.getBoolean("noti"));
+			UserEntry ue = new UserEntry(user.getString("username"),user.getBoolean("noti"),usersArea,j,Integer.parseInt(user.getString("id")));
 			j++;
 			ue.getUsrLabel().addEventHandler(MouseEvent.MOUSE_CLICKED , 
 		             event -> {labelContactClicked(event,ue);});
@@ -129,6 +169,7 @@ public class ChatWindowController implements Initializable{
 		
 		if(!chatlogs.containsKey("-1")) {
 			ChatLog cl = new ChatLog(-1,chatScroll,Mode.GLOBAL);
+			MainController.getClient().send(Template.changeChatTab(-1, MainController.getClient().getId()).getBytes());
 			cl.bindGridToScroll(chatScroll);
 			chatlogs.put(Integer.toString(-1), cl);
 			currentchat = cl;
@@ -167,13 +208,27 @@ public class ChatWindowController implements Initializable{
 		if(!chatlogs.containsKey(Integer.toString(ue.getId()))) {
 			ChatLog cl = new ChatLog(ue.getId(),chatScroll,Mode.PTP);
 			MainController.getClient().send(Template.changeChatTab(ue.getId(), MainController.getClient().getId()).getBytes());
-			Platform.runLater(new Runnable() {
-	            @Override
-	            public void run() {
-	            	cl.bindGridToScroll(chatScroll);
-	            }
-	       });
-			
+	        cl.bindGridToScroll(chatScroll);
+	        
+	        Task scrollDown = new Task<Void>() {
+
+				@Override
+				protected Void call() throws Exception {
+					clLatch.await();
+					Platform.runLater(new Runnable() {
+
+						@Override
+						public void run() {
+							chatScroll.setVvalue(chatScroll.getVmax());
+							clLatch = new CountDownLatch(1);
+						}
+						
+					});
+					return null;
+				}
+	        	
+	        };
+	        new Thread(scrollDown).start();
 			chatlogs.put(Integer.toString(ue.getId()), cl);
 			currentchat = cl;
 			
@@ -216,7 +271,7 @@ public class ChatWindowController implements Initializable{
 			send(privateMessage,true);
 		}else {
 			//System.out.println(MainController.getClient().getName()+"emri");
-			String globalMessage=Template.message(text,MainController.getClient().getName());
+			String globalMessage=Template.message(text,MainController.getClient().getName(),clicked);
 			send(globalMessage,true);
 		}
 	}
@@ -248,6 +303,9 @@ public class ChatWindowController implements Initializable{
 	
 
 	public static int getCurrentChatLog() {
+		if(currentchat!=null)
 		return currentchat.getPeerId();
+		else 
+		return -2;
 	}
 }
