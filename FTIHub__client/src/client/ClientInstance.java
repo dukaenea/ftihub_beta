@@ -3,6 +3,7 @@ package client;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import Tools.ChatLog;
 import Tools.Role;
 import application.ChatWindowController;
 import messageTemplate.ParseMessages;
@@ -80,6 +81,9 @@ public class ClientInstance implements Runnable{
 					            				break;
 					            			}
 					            		}
+					            		if(ChatWindowController.getChatLogsContainers().get(idOfSender)!=null)
+					            		ChatWindowController.getChatLogsContainers().get(idOfSender).addChatBubble(pm, Role.PEER,"");
+					            		
 					            		ChatWindowController.countdownuaLatch();
 					            	}
 					            }
