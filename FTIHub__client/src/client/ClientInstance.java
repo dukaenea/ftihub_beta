@@ -68,24 +68,24 @@ public class ClientInstance implements Runnable{
 						 Platform.runLater(new Runnable() {
 					            @Override
 					            public void run() {
-					            	if(ChatWindowController.getCurrentChatLog()==Integer.parseInt(idOfSender))
-					            	 ChatWindowController.getChatLogsContainers().get(idOfSender).addChatBubble(pm, Role.PEER,"");
-					            	else {
-					            		System.out.println("here");
-					            		JSONArray ja = ChatWindowController.getUsers();
-					            		for(int i=0;i<ja.length();i++) {
-					            			JSONObject jo = ja.getJSONObject(i);
-					            			if(jo.getString("id").equals(idOfSender)) {
-					            				jo.put("noti", "true");
-					            				ja.put(i, jo);
-					            				break;
-					            			}
-					            		}
-					            		if(ChatWindowController.getChatLogsContainers().get(idOfSender)!=null)
-					            		ChatWindowController.getChatLogsContainers().get(idOfSender).addChatBubble(pm, Role.PEER,"");
-					            		
-					            		ChatWindowController.countdownuaLatch();
+					            	if(ChatWindowController.getChatLogsContainers().get(idOfSender)!=null){
+					            	   ChatWindowController.getChatLogsContainers().get(idOfSender).addChatBubble(pm, Role.PEER,"");
 					            	}
+//					            	else {
+//					            		//System.out.println("here");
+//					            		JSONArray ja = ChatWindowController.getUsers();
+//					            		for(int i=0;i<ja.length();i++) {
+//					            			JSONObject jo = ja.getJSONObject(i);
+//					            			if(jo.getString("id").equals(idOfSender)) {
+//					            				jo.put("noti", "true");
+//					            				ja.put(i, jo);
+//					            				break;
+//					            			}
+//					            		}
+//					            		if(ChatWindowController.getChatLogsContainers().get(idOfSender)!=null)
+//					            		ChatWindowController.getChatLogsContainers().get(idOfSender).addChatBubble(pm, Role.PEER,"");
+//					            		ChatWindowController.countdownuaLatch();
+//					            	}
 					            }
 					       });
 						 break;
@@ -97,7 +97,7 @@ public class ClientInstance implements Runnable{
 				    	 JSONObject chathistory = JSON.parse(string);
 				    	 System.out.println(string);
 				    	 String idofSender = chathistory.getString("idsender");
-				    	 System.out.println( ChatWindowController.getChatLogsContainers().get(idofSender).getPeerId());
+				    	 //System.out.println( ChatWindowController.getChatLogsContainers().get(idofSender).getPeerId());
 				    	 Platform.runLater(new Runnable() {
 					            @Override
 					            public void run() {

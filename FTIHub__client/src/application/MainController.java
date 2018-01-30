@@ -145,6 +145,7 @@ public class MainController {
         sm = new SceneManager(new Stage(),"/application/chattwindow.fxml","application.css",800,460);
 		sm.initScene();
 		sm.showScene();
+		sm.killScene();
 		Main.getMainScene().hideScene();
 		
 	}

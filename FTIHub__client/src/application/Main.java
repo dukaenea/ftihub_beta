@@ -18,6 +18,7 @@ public class Main extends Application {
 	    mainScene = new SceneManager(primaryStage,"/application/Login-Signup.fxml","application.css",600,400);
 	    mainScene.initScene();
 	    mainScene.showScene();
+	    mainScene.killScene();
 	}
 	
 	public static SceneManager getMainScene() {

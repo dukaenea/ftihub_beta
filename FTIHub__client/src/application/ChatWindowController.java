@@ -155,7 +155,7 @@ public class ChatWindowController implements Initializable{
 			JSONObject user = (JSONObject) usersToFillWith.get(i);
 			if(user.getInt("id")==MainController.getClient().getId())
 				continue;
-			System.out.println(user.getBoolean("noti"));
+			//System.out.println(user.getBoolean("noti"));
 			UserEntry ue = new UserEntry(user.getString("username"),user.getBoolean("noti"),usersArea,j,Integer.parseInt(user.getString("id")));
 			j++;
 			ue.getUsrLabel().addEventHandler(MouseEvent.MOUSE_CLICKED , 
@@ -231,6 +231,7 @@ public class ChatWindowController implements Initializable{
 	        new Thread(scrollDown).start();
 			chatlogs.put(Integer.toString(ue.getId()), cl);
 			currentchat = cl;
+			chatScroll.setVvalue(chatScroll.getVmax());
 			
 		}
 		else {

@@ -2,10 +2,13 @@ package application;
 
 import java.io.IOException;
 
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class SceneManager {
     Stage stage;
@@ -46,7 +49,17 @@ public class SceneManager {
     }
     
     public void killScene() {
-    	stage.close();
+    	stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent arg0) {
+				Platform.exit();
+				System.exit(0);
+			}
+    		
+    	});
+    	//stage.close();
+
     }
     
     public void hideScene() {
